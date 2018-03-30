@@ -1,8 +1,17 @@
 #include <stdio.h>
+#include <string.h>
 
-void main ( void )
+void main ( int argc, char **argv)
 {
-    printf("Hello World!\n");
+    int index = 0;
+
+    printf("argc = %d \n", argc);
+
+    for(index = 0; index < argc; index++)
+    {
+        printf("argv[%d] = %s\n", index, *(argv+index));
+        
+    }
 
 }
 
