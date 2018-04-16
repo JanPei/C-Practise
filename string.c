@@ -3,7 +3,10 @@
 #include <stddef.h>
 
 #define MAX_STR_NUM     10
-#define MAX_STR_SIZE    10
+#define MAX_STR_SIZE    100
+
+
+const char * const jan = "JanPei";
 
 char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
 
@@ -40,6 +43,10 @@ void main ( int argc, char **argv)
             strcpy(dst[index], *(argv+index));
 
             printf("dst[%d] after strcpy is %s\n", index+1, dst[index]);
+            
+            strcat(dst[index], jan);
+
+            printf("dst[%d] after strcat is %s\n", index+1, dst[index]);
         }
     }
   
