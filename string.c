@@ -10,7 +10,7 @@ void main ( int argc, char **argv)
 
     for(index = 0; index < argc; index++)
     {
-        printf("argv[%d] = %s\n", index+1, *(argv+index));
+        printf("argv[%d] = %s, Length = %d \n", index+1, *(argv+index), strlen(*(argv+index)));
     }
   
     printf("The length of int is %d bytes.\n", sizeof(int));
