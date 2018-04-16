@@ -6,7 +6,7 @@
 #define MAX_STR_SIZE    100
 
 
-const char * const jan = "JanPei";
+const char * const jan = "jan";
 
 char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
 
@@ -32,7 +32,7 @@ void main ( int argc, char **argv)
             break;
         }
 
-        if(strlen(*(argv+index)) > MAX_STR_SIZE-1)
+        if((strlen(*(argv+index)) + strlen(jan)) > MAX_STR_SIZE-1)
         {
             printf("dst[%d] the input string is longer than the storage area.\n", index+1);
         }
@@ -43,6 +43,19 @@ void main ( int argc, char **argv)
             strcpy(dst[index], *(argv+index));
 
             printf("dst[%d] after strcpy is %s\n", index+1, dst[index]);
+
+            if(strcmp(*(argv+index), jan) > 0)
+            {
+                printf("argv[%d] = %s is bigger than jan\n", index+1, *(argv+index));
+            }
+            else if (strcmp(*(argv+index), jan) < 0)
+            {
+                printf("argv[%d] = %s is less than jan\n", index+1, *(argv+index));
+            }
+            else
+            {
+                printf("argv[%d] = %s is equel to jan\n", index+1, *(argv+index));
+            }
             
             strcat(dst[index], jan);
 
