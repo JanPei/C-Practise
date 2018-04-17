@@ -28,6 +28,7 @@ char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
 void main ( int argc, char **argv)
 {
     int index = 0;
+    char *ptr = NULL;
     char *token = NULL;
 
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
@@ -118,6 +119,11 @@ void main ( int argc, char **argv)
             strcat(dst[index], jan);
 
             printf("dst[%d] after strcat is %s\n", index, dst[index]);
+
+            /*打印 jan 后面的字符*/
+            ptr = dst[index] + strspn(dst[index], jan);
+            printf("The string after jan is %s \n", ptr);
+
 
             for(token = strtok(dst[index], token_sep); token != NULL; token = strtok(NULL, token_sep))
             {
