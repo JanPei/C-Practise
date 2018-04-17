@@ -16,6 +16,8 @@
 
 #define MAX_ERROR_NUM   50
 
+#define ASCII_NUM       128
+
 /*----------------------------------------------------------------------------------------------------*/
 const char * const jan = "jan";
 
@@ -154,5 +156,11 @@ void main ( int argc, char **argv)
         printf("No:%d Error info is %s\n", index, ptr);
     }
 
+    /*打印ASCII字符表*/
+    for(index = 0; index < ASCII_NUM; index++)
+    {
+        printf("ASCII NO:0x%X is %c\n", index, index);
+
+    }
 }
 
