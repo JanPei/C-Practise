@@ -121,9 +121,19 @@ void main ( int argc, char **argv)
             printf("dst[%d] after strcat is %s\n", index, dst[index]);
 
             /*打印 jan 后面的字符*/
-            ptr = dst[index] + strspn(dst[index], jan);
-            printf("The string after jan is %s \n", ptr);
+            ptr = strstr(dst[index], jan);          /*确认jan在该字符串中*/
+            if(ptr != NULL)
+            {
+                ptr += strlen(jan);                    /*将查找到的位置调整到jan的后面*/
+                printf("The string after jan using strstr is %s \n", ptr);
 
+            }
+
+            /*打印 jan 后面的字符，注意与strstr的区别*/
+            ptr = dst[index] + strspn(dst[index], jan);
+            printf("The string after jan using strspn is %s \n", ptr);
+
+            /*strstr中 jan 作为一个整体查找；strspn中jan作为3个字符查找*/
 
             for(token = strtok(dst[index], token_sep); token != NULL; token = strtok(NULL, token_sep))
             {
