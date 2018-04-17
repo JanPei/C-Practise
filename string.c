@@ -14,6 +14,8 @@
 
 #define ARRAYTEST_SIZE  5
 
+#define MAX_ERROR_NUM   50
+
 /*----------------------------------------------------------------------------------------------------*/
 const char * const jan = "jan";
 
@@ -144,5 +146,13 @@ void main ( int argc, char **argv)
             printf("\n");
         }
     }
+
+    /*打印操作系统返回的错误信息，用循环模拟*/
+    for(index = 0; index < MAX_ERROR_NUM; index++)
+    {
+        ptr = strerror(index);
+        printf("No:%d Error info is %s\n", index, ptr);
+    }
+
 }
 
