@@ -19,6 +19,8 @@ const char * const jan = "jan";
 
 const char * const separator = "--------------------------------------------------------------------------\n";
 
+const char * const token_sep = ",.";
+
 /*定义于堆上，初始值为0*/
 char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
 
@@ -26,6 +28,7 @@ char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
 void main ( int argc, char **argv)
 {
     int index = 0;
+    char *token = NULL;
 
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
     int arraytest[ARRAYTEST_SIZE] = {0,};
@@ -115,6 +118,14 @@ void main ( int argc, char **argv)
             strcat(dst[index], jan);
 
             printf("dst[%d] after strcat is %s\n", index, dst[index]);
+
+            for(token = strtok(dst[index], token_sep); token != NULL; token = strtok(NULL, token_sep))
+            {
+                printf("Token in dst[%d] is %s\n", index, token);
+
+            }
+
+            printf("\n");
         }
     }
 }
