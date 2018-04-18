@@ -160,6 +160,7 @@ void main ( int argc, char **argv)
     for(index = 0; index < ASCII_NUM; index++)
     {
         printf("ASCII NO:0x%X is %c\n", index, index);
+        /*相同的数值，用不同的格式打印，结果不同，即：printf函数按照格式做了转换*/
 
     }
 }
