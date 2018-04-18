@@ -1,6 +1,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 /*IO函数*/
 #include <stdio.h>
+#include <stdlib.h>
 
 /*string相关函数头文件*/
 #include <string.h>
@@ -38,12 +39,22 @@ void main ( int argc, char **argv)
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
     int arraytest[ARRAYTEST_SIZE] = {0,};
 
+    FILE *out = NULL;
+
     /*输出重定向，将结果打印到文本*/
-    //freopen("1.txt", "w", stdout);
+    //out = freopen("1.txt", "w", stdout);
 
     /*输出重定向，将结果打印到串口*/
-    freopen("COM1", "w", stdout);
+    out = freopen("COM1", "w", stdout);
     /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果*/
+
+    /*判断重定向是否成功*/
+    if(out == NULL)
+    {
+        perror("STDOUT redirectiong Error");
+
+        exit(EXIT_FAILURE);
+    }
 
     printf("argc = %d \n", argc);
     /*argc的个数包含程序名称，程序名称为第一个*/
