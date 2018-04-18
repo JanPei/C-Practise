@@ -38,6 +38,9 @@ void main ( int argc, char **argv)
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
     int arraytest[ARRAYTEST_SIZE] = {0,};
 
+    /*输出重定向，将结果打印到文本*/
+    freopen("1.txt", "w", stdout);
+
     printf("argc = %d \n", argc);
     /*argc的个数包含程序名称，程序名称为第一个*/
 
