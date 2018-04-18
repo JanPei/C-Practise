@@ -41,19 +41,23 @@ void main ( int argc, char **argv)
 
     FILE *out = NULL;
 
-    /*输出重定向，将结果打印到文本*/
-    //out = freopen("1.txt", "w", stdout);
-
-    /*输出重定向，将结果打印到串口*/
-    out = freopen("COM1", "w", stdout);
-    /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果*/
-
-    /*判断重定向是否成功*/
-    if(out == NULL)
+    /*如果命令行参数第二个是--re则进行重定向到命令行第三个参数制定的文件*/
+    if((argc >= 3) && (strcmp(*(argv+1), "--re") == 0))
     {
-        perror("STDOUT redirectiong Error");
+        /*输出重定向，将结果打印到文本*/
+        //out = freopen(*(argv+2), "w", stdout);
 
-        exit(EXIT_FAILURE);
+        /*输出重定向，将结果打印到串口*/
+        out = freopen(*(argv+2), "w", stdout);
+        /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果*/
+
+        /*判断重定向是否成功*/
+        if(out == NULL)
+        {
+            perror("STDOUT redirectiong Error");
+
+            exit(EXIT_FAILURE);
+        }
     }
 
     printf("argc = %d \n", argc);
