@@ -39,7 +39,11 @@ void main ( int argc, char **argv)
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
     int arraytest[ARRAYTEST_SIZE] = {0,};
 
+    /*输出重定向*/
     FILE *out = NULL;
+    /*输入重定向*/
+    FILE *in= NULL;
+    /*stdout,stdin可都重定向到一个设备如串口，也可只重定向其中一个*/
 
     /*如果命令行参数第二个是--re则进行重定向到命令行第三个参数制定的文件*/
     if((argc >= 3) && (strcmp(*(argv+1), "--re") == 0))
@@ -48,11 +52,14 @@ void main ( int argc, char **argv)
         //out = freopen(*(argv+2), "w", stdout);
 
         /*输出重定向，将结果打印到串口*/
-        out = freopen(*(argv+2), "w", stdout);
-        /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果*/
+        //out = freopen(*(argv+2), "w", stdout);
+        /*输入重定向，从串口读取数据*/
+        in = freopen(*(argv+2), "r", stdin);
+        /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果,从COM2发送，程控通过COM1接收结果*/
 
         /*判断重定向是否成功*/
-        if(out == NULL)
+        //if((out == NULL) || (in == NULL))
+        if((in == NULL))
         {
             perror("STDOUT redirectiong Error");
 
@@ -71,6 +78,23 @@ void main ( int argc, char **argv)
 
     printf(separator);
     /*-----------------------------------------------------------------------------------------------*/
+    ptr = malloc(MAX_STR_SIZE * sizeof (char));
+
+    if(ptr != NULL)
+    {
+        scanf("%s", ptr);
+
+        printf("OK");
+
+        printf("The input string is %s \n", ptr);
+
+        free(ptr);
+    }
+
+
+
+#if 0
+
     /*array 初始值测试*/
     for(index = 0; index < ARRAYTEST_SIZE; index++)
     {
@@ -186,5 +210,12 @@ void main ( int argc, char **argv)
         /*在串口调试工具中，不可打印字符会出错*/
 
     }
+
+#endif 
 }
 
+
+/*
+ * 1.调试信息使用标准输入输出。结果等信息使用fprintf输出到指定的文件流，使用sprintf进行格式转换。
+ *
+ */
