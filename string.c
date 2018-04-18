@@ -39,7 +39,11 @@ void main ( int argc, char **argv)
     int arraytest[ARRAYTEST_SIZE] = {0,};
 
     /*输出重定向，将结果打印到文本*/
-    freopen("1.txt", "w", stdout);
+    //freopen("1.txt", "w", stdout);
+
+    /*输出重定向，将结果打印到串口*/
+    freopen("COM1", "w", stdout);
+    /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果*/
 
     printf("argc = %d \n", argc);
     /*argc的个数包含程序名称，程序名称为第一个*/
@@ -164,6 +168,7 @@ void main ( int argc, char **argv)
     {
         printf("ASCII NO:0x%X is %c\n", index, index);
         /*相同的数值，用不同的格式打印，结果不同，即：printf函数按照格式做了转换*/
+        /*在串口调试工具中，不可打印字符会出错*/
 
     }
 }
