@@ -41,7 +41,12 @@ static void comSet(void);
 void main ( int argc, char **argv)
 {
     int index = 0;
+
     char *ptr = NULL;
+    char *ptr_index = NULL;
+    int recchar = 0;
+    
+
     char *token = NULL;
 
     /*定义于栈，为防止使用随机值，定义时至少包含一个初始值*/
@@ -58,37 +63,36 @@ void main ( int argc, char **argv)
 
     int comfd;
 
-    comSet();
 
-    comfd = open("COM1", O_RDWR);
-
-    dup2(comfd, fileno(stdin));
-    dup2(comfd, fileno(stdout));
-
-#if 0
     /*如果命令行参数第二个是--re则进行重定向到命令行第三个参数制定的文件*/
     if((argc >= 3) && (strcmp(*(argv+1), "--re") == 0))
     {
+        comSet();
+
+        comfd = open("COM1", O_RDWR);
+
+        dup2(comfd, fileno(stdin));
+        dup2(comfd, fileno(stdout));
+
         /*输出重定向，将结果打印到文本*/
         //out = freopen(*(argv+2), "w", stdout);
 
         /*输出重定向，将结果打印到串口*/
-        out = freopen(*(argv+2), "w", stdout);
+        //out = freopen(*(argv+2), "w", stdout);
         /*输入重定向，从串口读取数据*/
-        in = freopen(*(argv+2), "r", stdin);
+        //in = freopen(*(argv+2), "r", stdin);
         /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果,从COM2发送，程控通过COM1接收结果*/
 
         /*判断重定向是否成功*/
         //if((out == NULL) || (in == NULL))
-        if((in == NULL))
-        {
-            perror("STDOUT redirectiong Error");
+        //if((in == NULL))
+        //{
+        //    perror("STDOUT redirectiong Error");
 
-            exit(EXIT_FAILURE);
-        }
+        //    exit(EXIT_FAILURE);
+        //}
     }
 
-#endif
 
     printf("argc = %d \n", argc);
     /*argc的个数包含程序名称，程序名称为第一个*/
@@ -123,6 +127,7 @@ void main ( int argc, char **argv)
     }
 #endif
 
+#if 0
     for( ; ; )
     {
         scanf("%s", ptr);
@@ -131,11 +136,64 @@ void main ( int argc, char **argv)
     }
 
     free(ptr);
+#endif
 
 #if 0
+    for( ; ; )
+    {
 
+        while((recchar = getchar()) != EOF)
+        {
+            putchar(recchar);
+        }
 
+    }
+    free(ptr);
+#endif 
 
+#if 0
+    for( ; ; )
+    {
+
+        while((gets(ptr)) != NULL)
+        {
+            puts(ptr);
+        }
+
+    }
+    free(ptr);
+#endif
+
+#if 0
+    /*注意输入后的换行符*/
+    for( ; ; )
+    {
+
+        while((scanf("%c",ptr)) != EOF)
+        {
+            printf("%c, %d\n",*ptr, (char)(*ptr));
+        }
+
+    }
+    free(ptr);
+#endif
+    /*将输入的数字字符转换为实际的数字*/
+    for( ; ; )
+    {
+
+        while((scanf("%d",ptr)) != EOF)
+        {
+            for(index = 0; index< *ptr; index++)
+            {
+                printf("OK\n");
+
+            }
+        }
+
+    }
+    free(ptr);
+
+#if 0
     /*array 初始值测试*/
     for(index = 0; index < ARRAYTEST_SIZE; index++)
     {
