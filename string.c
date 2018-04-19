@@ -9,6 +9,10 @@
 /*含有size_t类型定义，size_t为无符号整数类型,但这里不等于unsigned int*/
 #include <stddef.h>
 
+#include <Windows.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 /*----------------------------------------------------------------------------------------------------*/
 #define MAX_STR_NUM     10
 #define MAX_STR_SIZE    100
@@ -26,8 +30,12 @@ const char * const separator = "------------------------------------------------
 
 const char * const token_sep = ",.";
 
+HANDLE hCom = NULL;
+
 /*定义于堆上，初始值为0*/
 char dst[MAX_STR_NUM][MAX_STR_SIZE] = {{'\0',},};
+
+static void comSet(void);
 
 /*----------------------------------------------------------------------------------------------------*/
 void main ( int argc, char **argv)
@@ -45,6 +53,19 @@ void main ( int argc, char **argv)
     FILE *in= NULL;
     /*stdout,stdin可都重定向到一个设备如串口，也可只重定向其中一个*/
 
+    DWORD wCount;//读取的字节数
+    BOOL bReadStat;
+
+    int comfd;
+
+    comSet();
+
+    comfd = open("COM1", O_RDWR);
+
+    dup2(comfd, fileno(stdin));
+    dup2(comfd, fileno(stdout));
+
+#if 0
     /*如果命令行参数第二个是--re则进行重定向到命令行第三个参数制定的文件*/
     if((argc >= 3) && (strcmp(*(argv+1), "--re") == 0))
     {
@@ -52,7 +73,7 @@ void main ( int argc, char **argv)
         //out = freopen(*(argv+2), "w", stdout);
 
         /*输出重定向，将结果打印到串口*/
-        //out = freopen(*(argv+2), "w", stdout);
+        out = freopen(*(argv+2), "w", stdout);
         /*输入重定向，从串口读取数据*/
         in = freopen(*(argv+2), "r", stdin);
         /*通过VSPD创建虚拟串口1,2并连接，程序通过COM1发送，在COM2中将显示结果,从COM2发送，程控通过COM1接收结果*/
@@ -67,6 +88,8 @@ void main ( int argc, char **argv)
         }
     }
 
+#endif
+
     printf("argc = %d \n", argc);
     /*argc的个数包含程序名称，程序名称为第一个*/
 
@@ -79,21 +102,39 @@ void main ( int argc, char **argv)
     printf(separator);
     /*-----------------------------------------------------------------------------------------------*/
     ptr = malloc(MAX_STR_SIZE * sizeof (char));
+    if(ptr == NULL)
+    {
+        perror("Malloc Error");
 
-    if(ptr != NULL)
+        exit(EXIT_FAILURE);
+
+    }
+
+#if 0
+    for( ; ; )
+    {
+        bReadStat=ReadFile(hCom,ptr,100,&wCount,NULL);
+
+        if(bReadStat)
+        {
+            ptr[wCount]='\0';
+            printf("%s\n",ptr);
+        }
+    }
+#endif
+
+    for( ; ; )
     {
         scanf("%s", ptr);
 
-        printf("OK");
-
         printf("The input string is %s \n", ptr);
-
-        free(ptr);
     }
 
-
+    free(ptr);
 
 #if 0
+
+
 
     /*array 初始值测试*/
     for(index = 0; index < ARRAYTEST_SIZE; index++)
@@ -214,6 +255,53 @@ void main ( int argc, char **argv)
 #endif 
 }
 
+static void comSet(void)
+{
+    COMMTIMEOUTS TimeOuts;
+    DCB dcb;
+    
+    hCom=CreateFile(TEXT("COM1"), GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+
+    if(hCom == (HANDLE)(-1))
+    {
+        perror("COM Error\n");
+
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        printf("COM OK\n");
+    }
+
+
+    SetupComm(hCom,1024,1024); //输入缓冲区和输出缓冲区的大小都是1024
+
+    //设定读超时
+    TimeOuts.ReadIntervalTimeout=1000;
+    TimeOuts.ReadTotalTimeoutMultiplier=500;
+    TimeOuts.ReadTotalTimeoutConstant=5000;
+
+    //设定写超时
+    TimeOuts.WriteTotalTimeoutMultiplier=500;
+    TimeOuts.WriteTotalTimeoutConstant=2000;
+
+    SetCommTimeouts(hCom,&TimeOuts); //设置超时
+
+
+    GetCommState(hCom,&dcb);
+
+    dcb.BaudRate=9600; //波特率为9600
+    dcb.ByteSize=8; //每个字节有8位
+    dcb.Parity=NOPARITY; //无奇偶校验位
+    dcb.StopBits=ONE5STOPBITS; //两个停止位
+
+    SetCommState(hCom,&dcb);
+
+
+    PurgeComm(hCom,PURGE_TXCLEAR|PURGE_RXCLEAR); //清空缓冲区
+
+    CloseHandle(hCom);
+}
 
 /*
  * 1.调试信息使用标准输入输出。结果等信息使用fprintf输出到指定的文件流，使用sprintf进行格式转换。
